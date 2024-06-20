@@ -52,7 +52,7 @@ public final class DomainName implements Serializable {
         if (value.isEmpty() || value.length() > MAX_LENGTH) {
             return false;
         }
-        var labels = value.split("\\.");
+        var labels = value.split("\\.", -1);
         for (var label : labels) {
             // Check label length
             if (label.isEmpty() || label.length() > 63) {

@@ -41,7 +41,8 @@ public class DomainNameTest {
             "example_123.com",
             "test@example.com",
             ".example.com",
-            "example .com"
+            "example .com",
+            "example.com."
     })
     void refuses_to_create_invalid_domain_names(String input) {
         assertThatThrownBy(() -> DomainName.fromString(input))
