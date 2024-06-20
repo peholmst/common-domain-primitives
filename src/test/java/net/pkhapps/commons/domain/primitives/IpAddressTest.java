@@ -1,5 +1,7 @@
 package net.pkhapps.commons.domain.primitives;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -87,5 +89,51 @@ public class IpAddressTest {
     void refuses_to_create_invalid_ipv6_addresses(String input) {
         assertThatThrownBy(() -> IpAddress.fromString(input))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void ipv4_addresses_with_same_value_are_equal() {
+        var ipAddress1 = IpAddress.fromString("192.168.1.2");
+        var ipAddress2 = IpAddress.fromString("192.168.1.2");
+        assertThat(ipAddress1).isEqualTo(ipAddress2);
+        assertThat(ipAddress1.hashCode()).isEqualTo(ipAddress2.hashCode());
+    }
+
+    @Test
+    void ipv6_addresses_with_same_value_are_equal() {
+        var ipAddress1 = IpAddress.fromString("2001:db8::1");
+        var ipAddress2 = IpAddress.fromString("2001:db8::1");
+        assertThat(ipAddress1).isEqualTo(ipAddress2);
+        assertThat(ipAddress1.hashCode()).isEqualTo(ipAddress2.hashCode());
+    }
+
+    @Test
+    void ipv4_addresses_can_be_serialized_to_json_using_jackson() throws Exception {
+        var objectMapper = new ObjectMapper();
+        var ipAddress = IpAddress.fromString("192.168.1.1");
+        var json = objectMapper.writeValueAsString(ipAddress);
+        assertThat(json).isEqualTo("\"192.168.1.1\"");
+    }
+
+    @Test
+    void ipv4_addresses_can_be_deserialized_from_json_using_jackson() throws Exception {
+        var objectMapper = new ObjectMapper();
+        var ipAddress = objectMapper.readValue("\"192.168.1.1\"", IpAddress.class);
+        assertThat(ipAddress.toString()).isEqualTo("192.168.1.1");
+    }
+
+    @Test
+    void ipv6_addresses_can_be_serialized_to_json_using_jackson() throws Exception {
+        var objectMapper = new ObjectMapper();
+        var ipAddress = IpAddress.fromString("2001:db8::1");
+        var json = objectMapper.writeValueAsString(ipAddress);
+        assertThat(json).isEqualTo("\"2001:db8::1\"");
+    }
+
+    @Test
+    void ipv6_addresses_can_be_deserialized_from_json_using_jackson() throws Exception {
+        var objectMapper = new ObjectMapper();
+        var ipAddress = objectMapper.readValue("\"2001:db8::1\"", IpAddress.class);
+        assertThat(ipAddress.toString()).isEqualTo("2001:db8::1");
     }
 }
