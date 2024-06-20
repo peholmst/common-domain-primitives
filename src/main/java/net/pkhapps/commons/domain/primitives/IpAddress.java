@@ -100,7 +100,7 @@ public sealed abstract class IpAddress implements Serializable {
          * @param value the string to check.
          * @return {@code true} if the string is a valid IPv6 address, {@code false} otherwise.
          */
-        public static boolean isValid(@NotNull String value) {
+        public static boolean isValidIpv6(@NotNull String value) {
             // Check length
             if (value.length() < MIN_LENGTH || value.length() > MAX_LENGTH) {
                 return false;
@@ -157,7 +157,7 @@ public sealed abstract class IpAddress implements Serializable {
     public static @NotNull IpAddress fromString(@NotNull String value) {
         if (Ipv4.isValidIpv4(value)) {
             return new Ipv4(value);
-        } else if (Ipv6.isValid(value)) {
+        } else if (Ipv6.isValidIpv6(value)) {
             return new Ipv6(value);
         } else {
             throw new IllegalArgumentException("Invalid IP address");
