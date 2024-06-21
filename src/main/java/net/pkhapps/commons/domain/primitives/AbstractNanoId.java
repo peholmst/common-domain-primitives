@@ -68,6 +68,20 @@ public abstract class AbstractNanoId implements Serializable {
     }
 
     /**
+     * Checks if the given string is a valid NanoID and returns it if so.
+     *
+     * @param value the string to check.
+     * @return the passed-in string.
+     * @throws IllegalArgumentException if the string was not a valid NanoID.
+     */
+    public static @NotNull String validate(@NotNull String value) {
+        if (!isValid(value)) {
+            throw new IllegalArgumentException("Invalid NanoID");
+        }
+        return value;
+    }
+
+    /**
      * Generates a new random NanoID string.
      *
      * @return the new NanoID string.
