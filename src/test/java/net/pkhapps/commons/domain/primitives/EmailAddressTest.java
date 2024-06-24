@@ -39,7 +39,7 @@ public class EmailAddressTest {
             "user@[IPv6:2001:db8::1]"
     })
     void can_create_valid_email_addresses(String input) {
-        var emailAddress = EmailAddress.fromString(input);
+        var emailAddress = EmailAddress.valueOf(input);
         assertThat(emailAddress.toString()).isEqualTo(input);
     }
 
@@ -93,14 +93,14 @@ public class EmailAddressTest {
             "missing_ipv6_prefix@[2001:db8::1]"
     })
     void refuses_to_create_invalid_email_addresses(String input) {
-        assertThatThrownBy(() -> EmailAddress.fromString(input))
+        assertThatThrownBy(() -> EmailAddress.valueOf(input))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void email_addresses_with_same_value_are_equal() {
-        var emailAddress1 = EmailAddress.fromString("user@example.com");
-        var emailAddress2 = EmailAddress.fromString("user@example.com");
+        var emailAddress1 = EmailAddress.valueOf("user@example.com");
+        var emailAddress2 = EmailAddress.valueOf("user@example.com");
         assertThat(emailAddress1).isEqualTo(emailAddress2);
         assertThat(emailAddress1.hashCode()).isEqualTo(emailAddress2.hashCode());
     }
@@ -108,7 +108,7 @@ public class EmailAddressTest {
     @Test
     void email_addresses_can_be_serialized_to_json_using_jackson() throws Exception {
         var objectMapper = new ObjectMapper();
-        var emailAddress = EmailAddress.fromString("user@example.com");
+        var emailAddress = EmailAddress.valueOf("user@example.com");
         var json = objectMapper.writeValueAsString(emailAddress);
         assertThat(json).isEqualTo("\"user@example.com\"");
     }

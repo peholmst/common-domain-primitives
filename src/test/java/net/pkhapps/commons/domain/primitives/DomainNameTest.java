@@ -40,7 +40,7 @@ public class DomainNameTest {
             "xn--kbenhavn-54a.eu"
     })
     void can_create_valid_domain_names(String input) {
-        var domainName = DomainName.fromString(input);
+        var domainName = DomainName.valueOf(input);
         assertThat(domainName.toString()).isEqualTo(input);
     }
 
@@ -60,14 +60,14 @@ public class DomainNameTest {
             "example.com."
     })
     void refuses_to_create_invalid_domain_names(String input) {
-        assertThatThrownBy(() -> DomainName.fromString(input))
+        assertThatThrownBy(() -> DomainName.valueOf(input))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void domain_names_with_same_value_are_equal() {
-        var domainName1 = DomainName.fromString("example.com");
-        var domainName2 = DomainName.fromString("example.com");
+        var domainName1 = DomainName.valueOf("example.com");
+        var domainName2 = DomainName.valueOf("example.com");
         assertThat(domainName1).isEqualTo(domainName2);
         assertThat(domainName1.hashCode()).isEqualTo(domainName2.hashCode());
     }
@@ -75,7 +75,7 @@ public class DomainNameTest {
     @Test
     void domain_names_can_be_serialized_to_json_using_jackson() throws Exception {
         var objectMapper = new ObjectMapper();
-        var domainName = DomainName.fromString("example.com");
+        var domainName = DomainName.valueOf("example.com");
         var json = objectMapper.writeValueAsString(domainName);
         assertThat(json).isEqualTo("\"example.com\"");
     }

@@ -34,7 +34,7 @@ public class NanoIdTest {
 
     @Test
     void can_create_nano_id_from_string() {
-        var nanoId = NanoId.fromString("ku_qLNv1wDmIS5_EcT3j7");
+        var nanoId = NanoId.valueOf("ku_qLNv1wDmIS5_EcT3j7");
         assertThat(nanoId.toString()).isEqualTo("ku_qLNv1wDmIS5_EcT3j7");
     }
 
@@ -61,14 +61,14 @@ public class NanoIdTest {
             "ku]qLNv1wDmIS5_EcT3j7",
     })
     void refuses_to_create_invalid_nano_ids(String input) {
-        assertThatThrownBy(() -> NanoId.fromString(input))
+        assertThatThrownBy(() -> NanoId.valueOf(input))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void nano_ids_with_same_value_are_equal() {
         var nanoId1 = NanoId.randomNanoId();
-        var nanoId2 = NanoId.fromString(nanoId1.toString());
+        var nanoId2 = NanoId.valueOf(nanoId1.toString());
         assertThat(nanoId1).isEqualTo(nanoId2);
         assertThat(nanoId1.hashCode()).isEqualTo(nanoId2.hashCode());
     }
@@ -76,7 +76,7 @@ public class NanoIdTest {
     @Test
     void nano_ids_can_be_serialized_to_json_using_jackson() throws Exception {
         var objectMapper = new ObjectMapper();
-        var nanoId = NanoId.fromString("ku_qLNv1wDmIS5_EcT3j7");
+        var nanoId = NanoId.valueOf("ku_qLNv1wDmIS5_EcT3j7");
         var json = objectMapper.writeValueAsString(nanoId);
         assertThat(json).isEqualTo("\"ku_qLNv1wDmIS5_EcT3j7\"");
     }

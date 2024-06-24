@@ -169,7 +169,7 @@ public sealed abstract class IpAddress implements Serializable {
      * @throws IllegalArgumentException if the string is not a valid IP address.
      */
     @JsonCreator
-    public static @NotNull IpAddress fromString(@NotNull String value) {
+    public static @NotNull IpAddress valueOf(@NotNull String value) {
         if (Ipv4.isValidIpv4(value)) {
             return new Ipv4(value);
         } else if (Ipv6.isValidIpv6(value)) {

@@ -124,7 +124,7 @@ public final class EmailAddress implements Serializable {
      * @throws IllegalArgumentException if the value is not a valid e-mail address.
      */
     @JsonCreator
-    public static @NotNull EmailAddress fromString(@NotNull String value) {
+    public static @NotNull EmailAddress valueOf(@NotNull String value) {
         if (!isValid(value)) {
             throw new IllegalArgumentException("Invalid e-mail address");
         }

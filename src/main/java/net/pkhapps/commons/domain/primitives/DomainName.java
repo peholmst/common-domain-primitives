@@ -95,7 +95,7 @@ public final class DomainName implements Serializable {
      * @throws IllegalArgumentException if the string is not a valid domain name.
      */
     @JsonCreator
-    public static @NotNull DomainName fromString(@NotNull String value) {
+    public static @NotNull DomainName valueOf(@NotNull String value) {
         if (!isValid(value)) {
             throw new IllegalArgumentException("Invalid domain name");
         }

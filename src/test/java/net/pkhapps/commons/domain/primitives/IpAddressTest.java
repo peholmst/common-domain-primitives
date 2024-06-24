@@ -41,7 +41,7 @@ public class IpAddressTest {
             "255.255.255.255"
     })
     void can_create_Ipv4_addresses(String input) {
-        var ipAddress = IpAddress.fromString(input);
+        var ipAddress = IpAddress.valueOf(input);
         assertThat(ipAddress).isInstanceOf(IpAddress.Ipv4.class);
         assertThat(ipAddress.toString()).isEqualTo(input);
     }
@@ -61,7 +61,7 @@ public class IpAddressTest {
             "aaa.bbb.ccc.ddd"
     })
     void refuses_to_create_invalid_ipv4_addresses(String input) {
-        assertThatThrownBy(() -> IpAddress.fromString(input))
+        assertThatThrownBy(() -> IpAddress.valueOf(input))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -82,7 +82,7 @@ public class IpAddressTest {
             "::"
     })
     void can_create_Ipv6_addresses(String input) {
-        var ipAddress = IpAddress.fromString(input);
+        var ipAddress = IpAddress.valueOf(input);
         assertThat(ipAddress).isInstanceOf(IpAddress.Ipv6.class);
         assertThat(ipAddress.toString()).isEqualTo(input);
     }
@@ -102,22 +102,22 @@ public class IpAddressTest {
             "2001:db8::85a3::7334"
     })
     void refuses_to_create_invalid_ipv6_addresses(String input) {
-        assertThatThrownBy(() -> IpAddress.fromString(input))
+        assertThatThrownBy(() -> IpAddress.valueOf(input))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void ipv4_addresses_with_same_value_are_equal() {
-        var ipAddress1 = IpAddress.fromString("192.168.1.2");
-        var ipAddress2 = IpAddress.fromString("192.168.1.2");
+        var ipAddress1 = IpAddress.valueOf("192.168.1.2");
+        var ipAddress2 = IpAddress.valueOf("192.168.1.2");
         assertThat(ipAddress1).isEqualTo(ipAddress2);
         assertThat(ipAddress1.hashCode()).isEqualTo(ipAddress2.hashCode());
     }
 
     @Test
     void ipv6_addresses_with_same_value_are_equal() {
-        var ipAddress1 = IpAddress.fromString("2001:db8::1");
-        var ipAddress2 = IpAddress.fromString("2001:db8::1");
+        var ipAddress1 = IpAddress.valueOf("2001:db8::1");
+        var ipAddress2 = IpAddress.valueOf("2001:db8::1");
         assertThat(ipAddress1).isEqualTo(ipAddress2);
         assertThat(ipAddress1.hashCode()).isEqualTo(ipAddress2.hashCode());
     }
@@ -125,7 +125,7 @@ public class IpAddressTest {
     @Test
     void ipv4_addresses_can_be_serialized_to_json_using_jackson() throws Exception {
         var objectMapper = new ObjectMapper();
-        var ipAddress = IpAddress.fromString("192.168.1.1");
+        var ipAddress = IpAddress.valueOf("192.168.1.1");
         var json = objectMapper.writeValueAsString(ipAddress);
         assertThat(json).isEqualTo("\"192.168.1.1\"");
     }
@@ -140,7 +140,7 @@ public class IpAddressTest {
     @Test
     void ipv6_addresses_can_be_serialized_to_json_using_jackson() throws Exception {
         var objectMapper = new ObjectMapper();
-        var ipAddress = IpAddress.fromString("2001:db8::1");
+        var ipAddress = IpAddress.valueOf("2001:db8::1");
         var json = objectMapper.writeValueAsString(ipAddress);
         assertThat(json).isEqualTo("\"2001:db8::1\"");
     }

@@ -37,7 +37,7 @@ public final class NanoId extends AbstractNanoId {
      * @throws IllegalArgumentException if the given string is not a valid NanoID.
      */
     @JsonCreator
-    public static @NotNull NanoId fromString(@NotNull String value) {
+    public static @NotNull NanoId valueOf(@NotNull String value) {
         return new NanoId(validate(value));
     }
 
