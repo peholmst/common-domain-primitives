@@ -1,6 +1,7 @@
 package net.pkhapps.commons.domain.primitives;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,5 +70,13 @@ public class PhoneNumberTest {
         var objectMapper = new ObjectMapper();
         var phoneNumber = objectMapper.readValue("\"+35840123456\"", PhoneNumber.class);
         assertThat(phoneNumber.toString()).isEqualTo("+35840123456");
+    }
+
+    @Test
+    void phone_numbers_are_validated_when_deserialized_from_json_using_jackson() {
+        var objectMapper = new ObjectMapper();
+        assertThatThrownBy(() -> objectMapper.readValue("\"+35840123456ABCDEF\"", PhoneNumber.class))
+                .isInstanceOf(ValueInstantiationException.class)
+                .cause().isInstanceOf(IllegalArgumentException.class);
     }
 }

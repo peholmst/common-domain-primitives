@@ -1,5 +1,6 @@
 package net.pkhapps.commons.domain.primitives;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -93,6 +94,7 @@ public final class PhoneNumber implements Serializable {
      * @return the new {@code PhoneNumber}.
      * @throws IllegalArgumentException if the value is not a valid phone number, even after sanitization.
      */
+    @JsonCreator
     public static @NotNull PhoneNumber valueOf(@NotNull String value) {
         var sanitized = sanitize(value);
         if (!isValid(sanitized)) {
