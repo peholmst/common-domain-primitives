@@ -16,6 +16,7 @@
 package net.pkhapps.commons.domain.primitives;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -86,5 +87,13 @@ public class NanoIdTest {
         var objectMapper = new ObjectMapper();
         var nanoId = objectMapper.readValue("\"ku_qLNv1wDmIS5_EcT3j7\"", NanoId.class);
         assertThat(nanoId.toString()).isEqualTo("ku_qLNv1wDmIS5_EcT3j7");
+    }
+
+    @Test
+    void nano_ids_are_validated_when_deserialized_from_json_using_jackson() {
+        var objectMapper = new ObjectMapper();
+        assertThatThrownBy(() -> objectMapper.readValue("\"ku_qLNv1wDmIS5_EcT3j7x\"", NanoId.class))
+                .isInstanceOf(ValueInstantiationException.class)
+                .cause().isInstanceOf(IllegalArgumentException.class);
     }
 }

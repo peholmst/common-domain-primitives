@@ -1,6 +1,7 @@
 package net.pkhapps.commons.domain.primitives.finland;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -65,5 +66,13 @@ public class PersonalIdentityCodeTest {
         var objectMapper = new ObjectMapper();
         var pic = objectMapper.readValue("\"" + BORN_2000S + "\"", PersonalIdentityCode.class);
         assertThat(pic.toString()).isEqualTo(BORN_2000S);
+    }
+
+    @Test
+    void pics_are_validated_when_deserialized_from_json_using_jackson() {
+        var objectMapper = new ObjectMapper();
+        assertThatThrownBy(() -> objectMapper.readValue("\"0101901-935U\"", PersonalIdentityCode.class))
+                .isInstanceOf(ValueInstantiationException.class)
+                .cause().isInstanceOf(IllegalArgumentException.class);
     }
 }

@@ -16,6 +16,7 @@
 package net.pkhapps.commons.domain.primitives;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -150,5 +151,21 @@ public class IpAddressTest {
         var objectMapper = new ObjectMapper();
         var ipAddress = objectMapper.readValue("\"2001:db8::1\"", IpAddress.class);
         assertThat(ipAddress.toString()).isEqualTo("2001:db8::1");
+    }
+
+    @Test
+    void ipv4_addresses_are_validated_when_deserialized_from_json_using_jackson() {
+        var objectMapper = new ObjectMapper();
+        assertThatThrownBy(() -> objectMapper.readValue("\"192.168.1.256\"", IpAddress.class))
+                .isInstanceOf(ValueInstantiationException.class)
+                .cause().isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void ipv6_addresses_are_validated_when_deserialized_from_json_using_jackson() {
+        var objectMapper = new ObjectMapper();
+        assertThatThrownBy(() -> objectMapper.readValue("\"2001:db8::g\"", IpAddress.class))
+                .isInstanceOf(ValueInstantiationException.class)
+                .cause().isInstanceOf(IllegalArgumentException.class);
     }
 }

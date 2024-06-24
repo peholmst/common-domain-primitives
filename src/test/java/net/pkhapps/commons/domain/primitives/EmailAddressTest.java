@@ -16,6 +16,7 @@
 package net.pkhapps.commons.domain.primitives;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -118,5 +119,13 @@ public class EmailAddressTest {
         var objectMapper = new ObjectMapper();
         var emailAddress = objectMapper.readValue("\"user@example.com\"", EmailAddress.class);
         assertThat(emailAddress.toString()).isEqualTo("user@example.com");
+    }
+
+    @Test
+    void email_addresses_are_validated_when_deserialized_from_json_using_jackson() {
+        var objectMapper = new ObjectMapper();
+        assertThatThrownBy(() -> objectMapper.readValue("\"user@domain<.com\"", EmailAddress.class))
+                .isInstanceOf(ValueInstantiationException.class)
+                .cause().isInstanceOf(IllegalArgumentException.class);
     }
 }
