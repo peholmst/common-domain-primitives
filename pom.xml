@@ -28,10 +28,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <jetbrains-annotations.version>24.1.0</jetbrains-annotations.version>
-        <jackson.version>2.17.1</jackson.version>
+        <jackson.version>2.17.2</jackson.version>
         <junit.version>5.11.0-M2</junit.version>
-        <assertj.version>3.25.3</assertj.version>
+        <assertj.version>3.26.3</assertj.version>
         <jnanoid.version>2.0.0</jnanoid.version>
+        <jooq.version>3.19.10</jooq.version>
+        <jpa.version>3.2.0</jpa.version>
     </properties>
 
     <dependencies>
@@ -49,6 +51,18 @@
             <groupId>com.aventrix.jnanoid</groupId>
             <artifactId>jnanoid</artifactId>
             <version>${jnanoid.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>${jooq.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>${jpa.version}</version>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
