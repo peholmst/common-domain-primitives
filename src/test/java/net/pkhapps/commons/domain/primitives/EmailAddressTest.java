@@ -128,4 +128,29 @@ public class EmailAddressTest {
                 .isInstanceOf(ValueInstantiationException.class)
                 .cause().isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    void email_addresses_have_a_verified_subtype() {
+        var email = EmailAddress.valueOf("user@example.com");
+        var verified = email.toVerified();
+        assertThat(email.toString()).isEqualTo(verified.toString());
+    }
+
+    @Test
+    void verified_email_addresses_are_not_equal_to_unverified_ones() {
+        var email = EmailAddress.valueOf("user@example.com");
+        assertThat(email).isNotEqualTo(email.toVerified());
+    }
+
+    @Test
+    void verified_email_addresses_also_work_with_jackson() throws Exception {
+        var objectMapper = new ObjectMapper();
+        var verified = EmailAddress.Verified.valueOf("user@example.com");
+        var json = objectMapper.writeValueAsString(verified);
+        var deserialized = objectMapper.readValue(json, EmailAddress.Verified.class);
+        assertThat(verified).isEqualTo(deserialized);
+        assertThatThrownBy(() -> objectMapper.readValue("\"user@domain<.com\"", EmailAddress.Verified.class))
+                .isInstanceOf(ValueInstantiationException.class)
+                .cause().isInstanceOf(IllegalArgumentException.class);
+    }
 }

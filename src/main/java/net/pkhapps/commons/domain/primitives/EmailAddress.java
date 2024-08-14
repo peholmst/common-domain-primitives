@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * Domain primitive representing a valid e-mail address.
  */
-public final class EmailAddress implements Serializable {
+public sealed class EmailAddress implements Serializable {
 
     public static final int MAX_LENGTH = 320; // local name 64 bytes, @ 1 byte, domain name 255 bytes
 
@@ -41,6 +41,17 @@ public final class EmailAddress implements Serializable {
     @JsonValue
     public String toString() {
         return value;
+    }
+
+    /**
+     * Creates a verified version of this e-mail address. This is intended to be used in applications where e.g. a user
+     * first registers with an e-mail address and then later verifies that the address is working and belonging to the
+     * user in question. Applications that don't need this distinction can ignore this method.
+     *
+     * @return a verified version of this e-mail address.
+     */
+    public @NotNull Verified toVerified() {
+        return new Verified(value);
     }
 
     @Override
@@ -129,5 +140,31 @@ public final class EmailAddress implements Serializable {
             throw new IllegalArgumentException("Invalid e-mail address");
         }
         return new EmailAddress(value);
+    }
+
+    /**
+     * Domain primitive for an e-mail address that has been verified to be working or belonging to the person or
+     * organization in question. How this verification has been performed is the application's responsibility.
+     */
+    public static final class Verified extends EmailAddress {
+
+        private Verified(@NotNull String value) {
+            super(value);
+        }
+
+        /**
+         * Creates a new verified {@code EmailAddress} from the given string.
+         *
+         * @param value the e-mail address to create.
+         * @return the new {@code EmailAddress}.
+         * @throws IllegalArgumentException if the value is not a valid e-mail address.
+         */
+        @JsonCreator
+        public static @NotNull Verified valueOf(@NotNull String value) {
+            if (!isValid(value)) {
+                throw new IllegalArgumentException("Invalid e-mail address");
+            }
+            return new Verified(value);
+        }
     }
 }
