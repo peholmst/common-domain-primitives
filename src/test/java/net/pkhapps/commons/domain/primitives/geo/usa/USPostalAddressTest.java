@@ -39,6 +39,28 @@ public class USPostalAddressTest {
     }
 
     @Test
+    void country_is_included_when_serialized_to_json() throws Exception {
+        var objectMapper = new ObjectMapper();
+        var address = USPostalAddress.of(
+                StreetNumber.valueOf("123"),
+                StreetName.valueOf("Main St."),
+                SecondaryAddressDesignator.valueOf("Apt 4B"),
+                CityName.valueOf("New York"),
+                USStateAndTerritory.NY,
+                ZipCode.valueOf("10001-1234")
+        );
+        var json = objectMapper.writeValueAsString(address);
+        assertThat(json).contains("\"country\":\"US\"");
+    }
+
+    @Test
+    void country_is_ignored_when_deserialized_from_json() throws Exception {
+        var objectMapper = new ObjectMapper();
+        var address = objectMapper.readValue("{\"streetAddress\":{\"number\":\"123\",\"name\":\"Main St.\"},\"secondaryAddressDesignator\":\"Apt 4B\",\"city\":\"New York\",\"state\":\"NY\",\"zipCode\":\"10001-1234\",\"country\":\"FI\"}", USPostalAddress.class);
+        assertThat(address.country()).isEqualTo(USPostalAddress.UNITED_STATES);
+    }
+
+    @Test
     void can_be_converted_to_a_generic_address() {
         var address = USPostalAddress.of(
                 StreetNumber.valueOf("123"),

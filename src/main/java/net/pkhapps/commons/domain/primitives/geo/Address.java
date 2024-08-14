@@ -15,11 +15,24 @@
  */
 package net.pkhapps.commons.domain.primitives.geo;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.OptBoolean;
+import net.pkhapps.commons.domain.primitives.geo.usa.USPostalAddress;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Interface to be implemented by all addresses (postal or physical).
  */
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "format",
+        requireTypeIdForSubtypes = OptBoolean.FALSE
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(GenericAddress.class),
+        @JsonSubTypes.Type(USPostalAddress.class)
+}) // TODO Make it possible to add custom sub types without having to mention them here
 public interface Address {
 
     /**

@@ -15,6 +15,7 @@
  */
 package net.pkhapps.commons.domain.primitives.geo;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,6 +30,7 @@ import static java.util.Objects.requireNonNull;
  * @param line3   the third address line, typically city, postal code, state or province (optional).
  * @param country the country of the address (required).
  */
+@JsonTypeName("generic")
 public record GenericAddress(@Nullable String line1, @Nullable String line2, @Nullable String line3,
                              @NotNull Country country) implements Address {
 

@@ -15,6 +15,8 @@
  */
 package net.pkhapps.commons.domain.primitives.geo.usa;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import net.pkhapps.commons.domain.primitives.geo.Address;
 import net.pkhapps.commons.domain.primitives.geo.Country;
 import net.pkhapps.commons.domain.primitives.geo.GenericAddress;
@@ -32,6 +34,7 @@ import static java.util.Objects.requireNonNull;
  * @param state                      the state or territory (required).
  * @param zipCode                    the zip code (required).
  */
+@JsonTypeName("US")
 public record USPostalAddress(@NotNull StreetAddress streetAddress,
                               @Nullable SecondaryAddressDesignator secondaryAddressDesignator,
                               @NotNull CityName city,
@@ -48,6 +51,7 @@ public record USPostalAddress(@NotNull StreetAddress streetAddress,
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public @NotNull Country country() {
         return UNITED_STATES;
     }
