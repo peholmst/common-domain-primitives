@@ -92,4 +92,9 @@ public class CityNameTest {
                 .isInstanceOf(ValueInstantiationException.class)
                 .cause().isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    void city_names_are_stripped() {
+        assertThat(CityName.valueOf(" New York\t").toString()).isEqualTo("New York");
+    }
 }
