@@ -57,7 +57,7 @@ public final class StreetName implements Serializable {
     }
 
     /**
-     * Checks if the given string is a valid street name (withotu checking that the street actually exists).
+     * Checks if the given string is a valid street name (without checking that the street actually exists).
      *
      * @param value the street name to validate.
      * @return {@code true} if the street name is syntactically valid, {@code false} otherwise.
