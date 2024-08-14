@@ -17,6 +17,7 @@ package net.pkhapps.commons.domain.primitives.geo.usa;
 
 import net.pkhapps.commons.domain.primitives.geo.Address;
 import net.pkhapps.commons.domain.primitives.geo.Country;
+import net.pkhapps.commons.domain.primitives.geo.GenericAddress;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,6 +50,27 @@ public record USPostalAddress(@NotNull StreetAddress streetAddress,
     @Override
     public @NotNull Country country() {
         return UNITED_STATES;
+    }
+
+    @Override
+    public @NotNull GenericAddress toGenericAddress() {
+        return new GenericAddress(line1(), line2(), line3(), country());
+    }
+
+    private @NotNull String line1() {
+        if (streetAddress.number() == null) {
+            return streetAddress.name().toString();
+        } else {
+            return "%s %s".formatted(streetAddress.number(), streetAddress.name());
+        }
+    }
+
+    private @Nullable String line2() {
+        return secondaryAddressDesignator == null ? null : secondaryAddressDesignator.toString();
+    }
+
+    private @NotNull String line3() {
+        return "%s, %s %s".formatted(city, state, zipCode);
     }
 
     /**

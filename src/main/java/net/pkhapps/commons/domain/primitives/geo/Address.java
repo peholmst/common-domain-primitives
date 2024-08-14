@@ -28,4 +28,11 @@ public interface Address {
      * @return the country.
      */
     @NotNull Country country();
+
+    /**
+     * Converts this address into a "generic" address that should work in most (if not all) countries.
+     *
+     * @return a generic version of this address.
+     */
+    @NotNull GenericAddress toGenericAddress();
 }

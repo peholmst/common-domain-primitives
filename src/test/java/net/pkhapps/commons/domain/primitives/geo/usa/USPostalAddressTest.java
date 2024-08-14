@@ -37,4 +37,21 @@ public class USPostalAddressTest {
         var deserialized = objectMapper.readValue(json, USPostalAddress.class);
         assertThat(address).isEqualTo(deserialized);
     }
+
+    @Test
+    void can_be_converted_to_a_generic_address() {
+        var address = USPostalAddress.of(
+                StreetNumber.valueOf("123"),
+                StreetName.valueOf("Main St."),
+                SecondaryAddressDesignator.valueOf("Apt 4B"),
+                CityName.valueOf("New York"),
+                USStateAndTerritory.NY,
+                ZipCode.valueOf("10001-1234")
+        );
+        var generic = address.toGenericAddress();
+        assertThat(generic.line1()).isEqualTo("123 Main St.");
+        assertThat(generic.line2()).isEqualTo("Apt 4B");
+        assertThat(generic.line3()).isEqualTo("New York, NY 10001-1234");
+        assertThat(generic.country()).isEqualTo(USPostalAddress.UNITED_STATES);
+    }
 }
