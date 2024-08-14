@@ -66,7 +66,7 @@ public final class CityName implements Serializable {
         if (value.isEmpty() || value.length() > MAX_LENGTH) {
             return false;
         }
-        return value.chars().allMatch(ch -> Character.isAlphabetic(ch) || Character.isWhitespace(ch) || ch == '.' || ch == '\'');
+        return value.chars().allMatch(ch -> Character.isAlphabetic(ch) || ch == ' ' || ch == '.' || ch == '\'');
     }
 
     /**

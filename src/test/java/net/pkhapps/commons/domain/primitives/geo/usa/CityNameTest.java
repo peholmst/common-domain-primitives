@@ -56,7 +56,8 @@ public class CityNameTest {
             "City^Town",             // Contains special character '^'
             "City&Village",          // Contains special character '&'
             "City*",                 // Contains special character '*'
-            "City/Place"             // Contains special character '/'
+            "City/Place",            // Contains special character '/'
+            "City\tPlace"            // Contains tab character
     })
     void refuses_to_create_invalid_city_names(String input) {
         assertThatThrownBy(() -> CityName.valueOf(input)).isInstanceOf(IllegalArgumentException.class);
