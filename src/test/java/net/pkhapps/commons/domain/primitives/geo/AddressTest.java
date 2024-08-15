@@ -1,7 +1,8 @@
 package net.pkhapps.commons.domain.primitives.geo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.pkhapps.commons.domain.primitives.geo.usa.*;
+import net.pkhapps.commons.domain.primitives.geo.usa.USPostalAddress;
+import net.pkhapps.commons.domain.primitives.geo.usa.USStateAndTerritory;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,14 +12,14 @@ public class AddressTest {
     @Test
     void can_serialize_and_deserialize_us_addresses_using_interface_as_type() throws Exception {
         var objectMapper = new ObjectMapper();
-        var address = USPostalAddress.of(
-                StreetNumber.valueOf("123"),
-                StreetName.valueOf("Main St."),
-                SecondaryAddressDesignator.valueOf("Apt 4B"),
-                CityName.valueOf("New York"),
-                USStateAndTerritory.NY,
-                ZipCode.valueOf("10001-1234")
-        );
+        var address = USPostalAddress.builder()
+                .streetNumber("123")
+                .streetName("Main St.")
+                .secondaryAddressDesignator("Apt 4B")
+                .city("New York")
+                .state(USStateAndTerritory.NY)
+                .zipCode("10001-1234")
+                .build();
         var json = objectMapper.writeValueAsString(address);
         System.out.println(json);
         var deserialized = objectMapper.readValue(json, Address.class);

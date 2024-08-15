@@ -25,14 +25,14 @@ public class USPostalAddressTest {
     @Test
     void postal_addresses_can_be_serialized_and_deserialized_using_jackson() throws Exception {
         var objectMapper = new ObjectMapper();
-        var address = USPostalAddress.of(
-                StreetNumber.valueOf("123"),
-                StreetName.valueOf("Main St."),
-                SecondaryAddressDesignator.valueOf("Apt 4B"),
-                CityName.valueOf("New York"),
-                USStateAndTerritory.NY,
-                ZipCode.valueOf("10001-1234")
-        );
+        var address = USPostalAddress.builder()
+                .streetNumber("123")
+                .streetName("Main St.")
+                .secondaryAddressDesignator("Apt 4B")
+                .city("New York")
+                .state(USStateAndTerritory.NY)
+                .zipCode("10001-1234")
+                .build();
         var json = objectMapper.writeValueAsString(address);
         var deserialized = objectMapper.readValue(json, USPostalAddress.class);
         assertThat(address).isEqualTo(deserialized);
@@ -41,14 +41,14 @@ public class USPostalAddressTest {
     @Test
     void country_is_included_when_serialized_to_json() throws Exception {
         var objectMapper = new ObjectMapper();
-        var address = USPostalAddress.of(
-                StreetNumber.valueOf("123"),
-                StreetName.valueOf("Main St."),
-                SecondaryAddressDesignator.valueOf("Apt 4B"),
-                CityName.valueOf("New York"),
-                USStateAndTerritory.NY,
-                ZipCode.valueOf("10001-1234")
-        );
+        var address = USPostalAddress.builder()
+                .streetNumber("123")
+                .streetName("Main St.")
+                .secondaryAddressDesignator("Apt 4B")
+                .city("New York")
+                .state(USStateAndTerritory.NY)
+                .zipCode("10001-1234")
+                .build();
         var json = objectMapper.writeValueAsString(address);
         assertThat(json).contains("\"country\":\"US\"");
     }
@@ -62,18 +62,39 @@ public class USPostalAddressTest {
 
     @Test
     void can_be_converted_to_a_generic_address() {
-        var address = USPostalAddress.of(
-                StreetNumber.valueOf("123"),
-                StreetName.valueOf("Main St."),
-                SecondaryAddressDesignator.valueOf("Apt 4B"),
-                CityName.valueOf("New York"),
-                USStateAndTerritory.NY,
-                ZipCode.valueOf("10001-1234")
-        );
+        var address = USPostalAddress.builder()
+                .streetNumber("123")
+                .streetName("Main St.")
+                .secondaryAddressDesignator("Apt 4B")
+                .city("New York")
+                .state(USStateAndTerritory.NY)
+                .zipCode("10001-1234")
+                .build();
         var generic = address.toGenericAddress();
         assertThat(generic.line1()).isEqualTo("123 Main St.");
         assertThat(generic.line2()).isEqualTo("Apt 4B");
         assertThat(generic.line3()).isEqualTo("New York, NY 10001-1234");
         assertThat(generic.country()).isEqualTo(USPostalAddress.UNITED_STATES);
+    }
+
+    @Test
+    void builder_can_be_used_to_edit_existing_addresses() {
+        var address = USPostalAddress.builder()
+                .streetNumber("123")
+                .streetName("Main St.")
+                .secondaryAddressDesignator("Apt 4B")
+                .city("New York")
+                .state(USStateAndTerritory.NY)
+                .zipCode("10001-1234")
+                .build();
+        var editedAddress = USPostalAddress.builder(address)
+                .streetNumber("124")
+                .build();
+        assertThat(editedAddress.streetAddress().number()).isEqualTo(StreetNumber.valueOf("124"));
+        assertThat(editedAddress.streetAddress().name()).isEqualTo(address.streetAddress().name());
+        assertThat(editedAddress.secondaryAddressDesignator()).isEqualTo(address.secondaryAddressDesignator());
+        assertThat(editedAddress.city()).isEqualTo(address.city());
+        assertThat(editedAddress.state()).isEqualTo(address.state());
+        assertThat(editedAddress.zipCode()).isEqualTo(address.zipCode());
     }
 }
