@@ -16,13 +16,16 @@
 package net.pkhapps.commons.domain.primitives.jooq;
 
 import net.pkhapps.commons.domain.primitives.PhoneNumber;
-import org.jetbrains.annotations.NotNull;
-import org.jooq.Converter;
+import org.jooq.impl.AbstractConverter;
 
 /**
  * JOOQ converter for converting between string and {@link PhoneNumber}.
  */
-public class PhoneNumberConverter implements Converter<String, PhoneNumber> {
+public class PhoneNumberConverter extends AbstractConverter<String, PhoneNumber> {
+
+    public PhoneNumberConverter() {
+        super(String.class, PhoneNumber.class);
+    }
 
     @Override
     public PhoneNumber from(String databaseObject) {
@@ -32,15 +35,5 @@ public class PhoneNumberConverter implements Converter<String, PhoneNumber> {
     @Override
     public String to(PhoneNumber userObject) {
         return userObject == null ? null : userObject.toString();
-    }
-
-    @Override
-    public @NotNull Class<String> fromType() {
-        return String.class;
-    }
-
-    @Override
-    public @NotNull Class<PhoneNumber> toType() {
-        return PhoneNumber.class;
     }
 }

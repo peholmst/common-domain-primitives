@@ -16,13 +16,16 @@
 package net.pkhapps.commons.domain.primitives.jooq;
 
 import net.pkhapps.commons.domain.primitives.NanoId;
-import org.jetbrains.annotations.NotNull;
-import org.jooq.Converter;
+import org.jooq.impl.AbstractConverter;
 
 /**
  * JOOQ converter for converting between string and {@link NanoId}.
  */
-public class NanoIdConverter implements Converter<String, NanoId> {
+public class NanoIdConverter extends AbstractConverter<String, NanoId> {
+
+    public NanoIdConverter() {
+        super(String.class, NanoId.class);
+    }
 
     @Override
     public NanoId from(String databaseObject) {
@@ -32,15 +35,5 @@ public class NanoIdConverter implements Converter<String, NanoId> {
     @Override
     public String to(NanoId userObject) {
         return userObject == null ? null : userObject.toString();
-    }
-
-    @Override
-    public @NotNull Class<String> fromType() {
-        return String.class;
-    }
-
-    @Override
-    public @NotNull Class<NanoId> toType() {
-        return NanoId.class;
     }
 }

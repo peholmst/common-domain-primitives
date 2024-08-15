@@ -16,13 +16,16 @@
 package net.pkhapps.commons.domain.primitives.jooq;
 
 import net.pkhapps.commons.domain.primitives.EmailAddress;
-import org.jetbrains.annotations.NotNull;
-import org.jooq.Converter;
+import org.jooq.impl.AbstractConverter;
 
 /**
  * JOOQ converter for converting between string and {@link EmailAddress}.
  */
-public class EmailAddressConverter implements Converter<String, EmailAddress> {
+public class EmailAddressConverter extends AbstractConverter<String, EmailAddress> {
+
+    public EmailAddressConverter() {
+        super(String.class, EmailAddress.class);
+    }
 
     @Override
     public EmailAddress from(String databaseObject) {
@@ -32,15 +35,5 @@ public class EmailAddressConverter implements Converter<String, EmailAddress> {
     @Override
     public String to(EmailAddress userObject) {
         return userObject == null ? null : userObject.toString();
-    }
-
-    @Override
-    public @NotNull Class<String> fromType() {
-        return String.class;
-    }
-
-    @Override
-    public @NotNull Class<EmailAddress> toType() {
-        return EmailAddress.class;
     }
 }

@@ -16,13 +16,16 @@
 package net.pkhapps.commons.domain.primitives.jooq;
 
 import net.pkhapps.commons.domain.primitives.DomainName;
-import org.jetbrains.annotations.NotNull;
-import org.jooq.Converter;
+import org.jooq.impl.AbstractConverter;
 
 /**
  * JOOQ converter for converting between string and {@link DomainName}.
  */
-public class DomainNameConverter implements Converter<String, DomainName> {
+public class DomainNameConverter extends AbstractConverter<String, DomainName> {
+
+    public DomainNameConverter() {
+        super(String.class, DomainName.class);
+    }
 
     @Override
     public DomainName from(String databaseObject) {
@@ -32,15 +35,5 @@ public class DomainNameConverter implements Converter<String, DomainName> {
     @Override
     public String to(DomainName userObject) {
         return userObject == null ? null : userObject.toString();
-    }
-
-    @Override
-    public @NotNull Class<String> fromType() {
-        return String.class;
-    }
-
-    @Override
-    public @NotNull Class<DomainName> toType() {
-        return DomainName.class;
     }
 }

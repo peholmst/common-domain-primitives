@@ -16,13 +16,16 @@
 package net.pkhapps.commons.domain.primitives.jooq;
 
 import net.pkhapps.commons.domain.primitives.IpAddress;
-import org.jetbrains.annotations.NotNull;
-import org.jooq.Converter;
+import org.jooq.impl.AbstractConverter;
 
 /**
  * JOOQ converter for converting between string and {@link IpAddress}.
  */
-public class IpAddressConverter implements Converter<String, IpAddress> {
+public class IpAddressConverter extends AbstractConverter<String, IpAddress> {
+
+    public IpAddressConverter() {
+        super(String.class, IpAddress.class);
+    }
 
     @Override
     public IpAddress from(String databaseObject) {
@@ -32,15 +35,5 @@ public class IpAddressConverter implements Converter<String, IpAddress> {
     @Override
     public String to(IpAddress userObject) {
         return userObject == null ? null : userObject.toString();
-    }
-
-    @Override
-    public @NotNull Class<String> fromType() {
-        return String.class;
-    }
-
-    @Override
-    public @NotNull Class<IpAddress> toType() {
-        return IpAddress.class;
     }
 }

@@ -16,13 +16,16 @@
 package net.pkhapps.commons.domain.primitives.geo.jooq;
 
 import net.pkhapps.commons.domain.primitives.geo.Country;
-import org.jetbrains.annotations.NotNull;
-import org.jooq.Converter;
+import org.jooq.impl.AbstractConverter;
 
 /**
  * JOOQ converter for converting between string and {@link Country}.
  */
-public class CountryConverter implements Converter<String, Country> {
+public class CountryConverter extends AbstractConverter<String, Country> {
+
+    public CountryConverter() {
+        super(String.class, Country.class);
+    }
 
     @Override
     public Country from(String databaseObject) {
@@ -32,15 +35,5 @@ public class CountryConverter implements Converter<String, Country> {
     @Override
     public String to(Country userObject) {
         return userObject == null ? null : userObject.toString();
-    }
-
-    @Override
-    public @NotNull Class<String> fromType() {
-        return String.class;
-    }
-
-    @Override
-    public @NotNull Class<Country> toType() {
-        return Country.class;
     }
 }

@@ -16,13 +16,16 @@
 package net.pkhapps.commons.domain.primitives.jooq;
 
 import net.pkhapps.commons.domain.primitives.UserId;
-import org.jetbrains.annotations.NotNull;
-import org.jooq.Converter;
+import org.jooq.impl.AbstractConverter;
 
 /**
  * JOOQ converter for converting between string and {@link UserId}.
  */
-public class UserIdConverter implements Converter<String, UserId> {
+public class UserIdConverter extends AbstractConverter<String, UserId> {
+
+    public UserIdConverter() {
+        super(String.class, UserId.class);
+    }
 
     @Override
     public UserId from(String databaseObject) {
@@ -32,15 +35,5 @@ public class UserIdConverter implements Converter<String, UserId> {
     @Override
     public String to(UserId userObject) {
         return userObject == null ? null : userObject.toString();
-    }
-
-    @Override
-    public @NotNull Class<String> fromType() {
-        return String.class;
-    }
-
-    @Override
-    public @NotNull Class<UserId> toType() {
-        return UserId.class;
     }
 }

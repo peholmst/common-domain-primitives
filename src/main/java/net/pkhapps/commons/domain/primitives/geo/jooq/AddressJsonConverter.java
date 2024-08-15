@@ -18,19 +18,19 @@ package net.pkhapps.commons.domain.primitives.geo.jooq;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.pkhapps.commons.domain.primitives.geo.Address;
-import org.jetbrains.annotations.NotNull;
-import org.jooq.Converter;
 import org.jooq.JSONB;
 import org.jooq.exception.DataTypeException;
+import org.jooq.impl.AbstractConverter;
 
 /**
  * JOOQ converter for converting between {@link JSONB} and {@link Address} using Jackson.
  */
-public class AddressJsonConverter implements Converter<JSONB, Address> {
+public class AddressJsonConverter extends AbstractConverter<JSONB, Address> {
 
     private final ObjectMapper objectMapper;
 
     public AddressJsonConverter() {
+        super(JSONB.class, Address.class);
         objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
     }
@@ -51,15 +51,5 @@ public class AddressJsonConverter implements Converter<JSONB, Address> {
         } catch (JsonProcessingException ex) {
             throw new DataTypeException("Could not serialize to JSON", ex);
         }
-    }
-
-    @Override
-    public @NotNull Class<JSONB> fromType() {
-        return JSONB.class;
-    }
-
-    @Override
-    public @NotNull Class<Address> toType() {
-        return Address.class;
     }
 }
