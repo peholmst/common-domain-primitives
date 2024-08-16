@@ -15,6 +15,7 @@
  */
 package net.pkhapps.commons.domain.primitives.geo.usa;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,6 +76,7 @@ public final class SecondaryAddressDesignator implements Serializable {
      * @return the new {@code SecondaryAddressDesignator}.
      * @throws IllegalArgumentException if the value is not a valid address designator.
      */
+    @JsonCreator
     public static @NotNull SecondaryAddressDesignator valueOf(@NotNull String value) {
         var stripped = value.strip();
         if (!isValid(stripped)) {
