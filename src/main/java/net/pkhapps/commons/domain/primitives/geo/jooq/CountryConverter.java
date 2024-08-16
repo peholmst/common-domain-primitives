@@ -29,11 +29,11 @@ public class CountryConverter extends AbstractConverter<String, Country> {
 
     @Override
     public Country from(String databaseObject) {
-        return databaseObject == null ? null : Country.valueOf(databaseObject);
+        return databaseObject == null ? null : Country.ofIsoCode(databaseObject);
     }
 
     @Override
     public String to(Country userObject) {
-        return userObject == null ? null : userObject.toString();
+        return userObject == null ? null : userObject.isoCode();
     }
 }

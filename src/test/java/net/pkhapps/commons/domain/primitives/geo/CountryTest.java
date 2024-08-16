@@ -18,8 +18,6 @@ package net.pkhapps.commons.domain.primitives.geo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Locale;
 
@@ -47,45 +45,6 @@ public class CountryTest {
         assertThatThrownBy(() -> Country.ofIsoCode("åäö")).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "Îles Caïmans",
-            "Centrafricaine, République",
-            "Cocos (Keeling) Islands",
-            "Finland",
-            "Al Jaza'ir",
-            "Kūki 'Āirani",
-            "Côte D'ivoire",
-            "al-ʿIrāq",
-            "Aolepān Aorōkin Ṃajeḷ",
-            "Åland"
-    })
-    void can_be_created_from_name(String name) {
-        assertThat(Country.ofName(name).displayName()).isEqualTo(name);
-    }
-
-    @Test
-    void user_named_countries_have_max_length() {
-        assertThatThrownBy(() -> Country.ofName("A".repeat(Country.UserNamedCountry.MAX_LENGTH + 1))).isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "",
-            " ",
-            "\t",
-            "\"",
-            ";",
-            "<",
-            ">",
-            ":",
-            "|",
-            "_"
-    })
-    void validates_user_named_countries_to_some_extent(String input) {
-        assertThatThrownBy(() -> Country.ofName(input)).isInstanceOf(IllegalArgumentException.class);
-    }
-
     @Test
     void iso_countries_are_available_as_list() {
         var isoCountryCodes = Locale.getISOCountries(Locale.IsoCountryCode.PART1_ALPHA2);
@@ -94,7 +53,7 @@ public class CountryTest {
     }
 
     @Test
-    void iso_countries_with_same_locale_are_equal() {
+    void countries_with_same_locale_are_equal() {
         var country1 = Country.ofIsoCode("fi");
         var country2 = Country.ofIsoCode("FI");
         assertThat(country1).isEqualTo(country2);
@@ -102,15 +61,7 @@ public class CountryTest {
     }
 
     @Test
-    void user_named_countries_with_same_name_are_equal() {
-        var country1 = Country.ofName("Suomi");
-        var country2 = Country.ofName("Suomi");
-        assertThat(country1).isEqualTo(country2);
-        assertThat(country1.hashCode()).isEqualTo(country2.hashCode());
-    }
-
-    @Test
-    void iso_countries_can_be_serialized_to_json_using_jackson() throws Exception {
+    void countries_can_be_serialized_to_json_using_jackson() throws Exception {
         var objectMapper = new ObjectMapper();
         var country = Country.ofIsoCode("fi");
         var json = objectMapper.writeValueAsString(country);
@@ -118,33 +69,17 @@ public class CountryTest {
     }
 
     @Test
-    void user_named_countries_can_be_serialized_to_json_using_jackson() throws Exception {
-        var objectMapper = new ObjectMapper();
-        var country = Country.ofName("Suomi");
-        var json = objectMapper.writeValueAsString(country);
-        assertThat(json).isEqualTo("\"Suomi\"");
-    }
-
-    @Test
-    void iso_countries_can_be_deserialized_from_json_using_jackson() throws Exception {
+    void countries_can_be_deserialized_from_json_using_jackson() throws Exception {
         var objectMapper = new ObjectMapper();
         var country = objectMapper.readValue("\"SE\"", Country.class);
-        assertThat(country).isInstanceOf(Country.IsoCountry.class);
+        assertThat(country).isInstanceOf(Country.class);
         assertThat(country.displayName(Locale.ENGLISH)).isEqualTo("Sweden");
-    }
-
-    @Test
-    void user_named_countries_can_be_deserialized_from_json_using_jackson() throws Exception {
-        var objectMapper = new ObjectMapper();
-        var country = objectMapper.readValue("\"Suomi\"", Country.class);
-        assertThat(country).isInstanceOf(Country.UserNamedCountry.class);
-        assertThat(country.displayName()).isEqualTo("Suomi");
     }
 
     @Test
     void countries_are_validated_when_deserialized_from_json_using_jackson() {
         var objectMapper = new ObjectMapper();
-        assertThatThrownBy(() -> objectMapper.readValue("\"<Finland>\"", Country.class))
+        assertThatThrownBy(() -> objectMapper.readValue("\"non-iso-code\"", Country.class))
                 .isInstanceOf(ValueInstantiationException.class)
                 .cause().isInstanceOf(IllegalArgumentException.class);
     }

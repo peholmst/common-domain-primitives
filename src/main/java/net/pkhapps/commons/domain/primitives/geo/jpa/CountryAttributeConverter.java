@@ -27,11 +27,11 @@ public class CountryAttributeConverter implements AttributeConverter<Country, St
 
     @Override
     public String convertToDatabaseColumn(Country attribute) {
-        return attribute == null ? null : attribute.toString();
+        return attribute == null ? null : attribute.isoCode();
     }
 
     @Override
     public Country convertToEntityAttribute(String dbData) {
-        return dbData == null ? null : Country.valueOf(dbData);
+        return dbData == null ? null : Country.ofIsoCode(dbData);
     }
 }
